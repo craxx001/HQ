@@ -209,13 +209,13 @@ def verify_keyboard():
             styled_url_button(
                 s.get("name", DEFAULT_STORE["name"]),
                 s.get("url", DEFAULT_STORE["url"]),
-                "primary",
+                "success",
             ),
         ],
         [styled_url_button(
             h.get("name", DEFAULT_HOWTO["name"]),
             h.get("url", DEFAULT_HOWTO["url"]),
-            "danger",
+            "primary",
         )],
     ])
 
@@ -308,9 +308,9 @@ async def temporary_warning(message, text, seconds=3):
 
 async def invalid_format(message):
     sent = await message.reply_text(
-        "❌ <b>Invalid Format</b>\n\n"
-        "📝 <b>Usage:</b> /like [region] [uid]\n\n"
-        "📌 <b>Example:</b> /like ind 12234555",
+        "🚫 <b>Iɴᴠᴀʟɪᴅ Cᴏᴍᴍᴀɴᴅ</b>\n\n"
+        "➺ <b>Uꜱᴀɢɛ:</b> /𝚕𝚒𝚔𝚎  [𝚛𝚎𝚐𝚒𝚘𝚗]  [𝚞𝚒𝚍]\n\n"
+        "➺ <b>Exᴀᴍᴘʟᴇ:</b> /𝚕𝚒𝚔𝚎  𝚒𝚗𝚍  𝟷𝟸𝟼𝟶𝟷𝟽𝟽𝟾𝟺𝟻",
         parse_mode="HTML",
     )
     # Keep it visible, as in the reference screenshot. Telegram command
@@ -337,8 +337,8 @@ async def cmd_like(update: Update, context: ContextTypes.DEFAULT_TYPE):
     uid = args[1]
 
     processing = await message.reply_text(
-        "🎮 <b>Processing your like request...</b>\n\n"
-        "⌛ <i>Please wait</i>",
+        "⚡ <b>Vɛʀɪꜰʏɪɴɢ ʏᴏᴜʀ ʟɪᴋᴇ ʀᴇǫᴜᴇꜱᴛ...</b>\n\n"
+        "⌛ ɢᴇɴᴇʀᴀᴛɪɴɢ ʟɪɴᴋ...",
         parse_mode="HTML",
     )
 
@@ -349,7 +349,7 @@ async def cmd_like(update: Update, context: ContextTypes.DEFAULT_TYPE):
     verify = db["config"]["verify"]
     if not verify.get("active") or not verify.get("url"):
         await processing.edit_text(
-            "⚠️ <b>Verification is currently unavailable.</b>\n\nPlease try again later.",
+            "⚠️ <b>Vᴇʀɪꜰɪᴄᴀᴛɪᴏɴ ɪꜱ ᴄᴜʀʀᴇɴᴛʟʏ ᴜɴᴀᴠᴀɪʟᴀʙʟᴇ!</b>\n\nPlease try again later.",
             parse_mode="HTML",
         )
         return
@@ -357,14 +357,17 @@ async def cmd_like(update: Update, context: ContextTypes.DEFAULT_TYPE):
     name = html.escape(message.from_user.full_name or message.from_user.first_name or "User")
     url = verify["url"]
     text = (
-        "🎮 <b>LIKE REQUEST VERIFICATION</b>\n"
-        "━━━━━━━━━━━━━━━━━━\n\n"
-        f"👤 <b>Name:</b> {name}\n"
-        f"🆔 <b>UID:</b> <code>{uid}</code>\n"
-        f"🌍 <b>Region:</b> <code>{region}</code>\n\n"
-        "🔗 <b>Verification Link:</b>\n"
+        "•── ⋅ ⋅ ──── ⋅᯽⋅ ──── ⋅ ⋅ ──•\n"
+        "✨ <b>Lɪᴋᴇ Rᴇǫᴜᴇꜱᴛ Vᴇʀɪꜰɪᴄᴀᴛɪᴏɴ </b>✨\n"
+        "•── ⋅ ⋅ ──── ⋅᯽⋅ ──── ⋅ ⋅ ──•\n"
+        "<blockquote>"
+        f"👤 <b>ɴᴀᴍɛ:</b> {name}\n"
+        f"🆔 <b>ᴜɪᴅ:</b> <code>{uid}</code>\n"
+        f"🌍 <b>ʀɛɢɪᴏɴ:</b> <code>{region}</code>\n"
+        "</blockquote>\n"
+        "🔗 <b>Vɛʀɪꜰɪᴄᴀᴛɪᴏɴ lɪɴᴋ:</b>\n"
         f'<a href="{html.escape(url, quote=True)}">{html.escape(url)}</a>\n\n'
-        "⚠️ <b>Verify to send free likes</b>"
+        "⚠️ <b>ᴠᴇʀɪꜰʏ ᴛʜɪꜱ ʟɪɴᴋ ᴛᴏ ɢᴇᴛ ʟɪᴋᴇꜱ</b>"
     )
 
     await processing.edit_text(
@@ -390,7 +393,7 @@ async def cmd_admin(update: Update, context: ContextTypes.DEFAULT_TYPE):
     remember_user(message.from_user)
     clear_state(context)
     await message.reply_text(
-        "👋 <b>Welcome Admins!!</b>\n\nChoose an option:",
+        "👋 <b>Welcome Admins!!</b>\n\nᴄʜᴏᴏꜱᴇ ᴀɴ ᴏᴘᴛɪᴏɴ :",
         parse_mode="HTML",
         reply_markup=admin_main_kb(),
     )
@@ -505,9 +508,18 @@ async def message_router(update: Update, context: ContextTypes.DEFAULT_TYPE):
             warning = await context.bot.send_message(
                 chat_id=chat_id,
                 text=(
-                    "🚫 <b>Only commands are allowed here.</b>\n\n"
-                    "Use: <code>/like {region} {uid}</code>\n"
-                    "Example: <code>/like ind 12234555</code>"
+                    "💞 <b>WELCOME TO FREE LIKE BOT</b>\n"
+                    "•── ⋅ ⋅ ──── ⋅᯽⋅ ──── ⋅ ⋅ ──•\n"
+                    "<blockquote>"
+                    "👤 <b>ɴᴀᴍɛ</b>» {name}\n"
+                    "⚡ <b>ᴘʟᴀɴ</b>» ꜰʀᴇᴇ ᴜꜱᴇʀ\n"
+                    "❤️ <b>ᴅᴀɪʟʏ ʟɪᴍɪᴛ</b>» 𝟣\n"
+                    "🕓 <b>ᴅᴀɪʟʏ ʀᴇꜱᴇᴛ</b>» 𝟦:𝟢𝟢 ᴀᴍ\n"
+                    "</blockquote>\n"
+                    "<b>Usage:</b>\n"
+                    "🎁 <code>/like {region} {uid}</code> -\n\n"
+                    "<b>Example:</b>\n"
+                    "📌 <code>/like ind 12345609</code>"
                 ),
                 parse_mode="HTML",
             )
