@@ -185,12 +185,24 @@ def verify_keyboard():
     v = cfg["verify"]
     s = cfg["store"]
     h = cfg["howto"]
+    # VERIFY must be a direct URL button. Using callback_data +
+    # answerCallbackQuery(url=...) can show an "Open verification link"
+    # alert on some Telegram clients instead of opening the URL directly.
     return InlineKeyboardMarkup([
         [
-            InlineKeyboardButton(v.get("name", DEFAULT_VERIFY["name"]), callback_data="verify_click"),
-            InlineKeyboardButton(s.get("name", DEFAULT_STORE["name"]), url=s.get("url", DEFAULT_STORE["url"])),
+            InlineKeyboardButton(
+                v.get("name", DEFAULT_VERIFY["name"]),
+                url=v.get("url", DEFAULT_VERIFY["url"]),
+            ),
+            InlineKeyboardButton(
+                s.get("name", DEFAULT_STORE["name"]),
+                url=s.get("url", DEFAULT_STORE["url"]),
+            ),
         ],
-        [InlineKeyboardButton(h.get("name", DEFAULT_HOWTO["name"]), url=h.get("url", DEFAULT_HOWTO["url"]))],
+        [InlineKeyboardButton(
+            h.get("name", DEFAULT_HOWTO["name"]),
+            url=h.get("url", DEFAULT_HOWTO["url"]),
+        )],
     ])
 
 
@@ -470,14 +482,20 @@ async def message_router(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # Only the group/supergroup is command-only. Private chat remains usable
     # for admin configuration and future additions.
     if message.chat and message.chat.type in ("group", "supergroup"):
-        await safe_delete(message)
-        await temporary_warning(
-            message,
-            "🚫 <b>Only commands are allowed here.</b>\n\n"
-            "Use: <code>/like {region} {uid}</code>\n"
-            "Example: <code>/like ind 12234555</code>",
-            3,
-        )
+        # Send the warning first so Telegram can create the reply/quote, then
+        # delete the user's original message immediately afterwards.
+        try:
+            warning = await message.reply_text(
+                "🚫 <b>Only commands are allowed here.</b>\n\n"
+                "Use: <code>/like {region} {uid}</code>\n"
+                "Example: <code>/like ind 12234555</code>",
+                parse_mode="HTML",
+            )
+            await safe_delete(message)
+            await asyncio.sleep(3)
+            await safe_delete(warning)
+        except Exception as exc:
+            log.debug("Group moderation failed: %s", exc)
 
 
 async def unknown_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -496,27 +514,6 @@ async def callback_router(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not q:
         return
     data = q.data or ""
-
-    # VERIFY click: save the user's Telegram ID, then open the currently active
-    # admin-configured verification URL.
-    if data == "verify_click":
-        user = q.from_user
-        remember_user(user)
-        clicks = user_id_list()
-        if user.id not in clicks:
-            db["verify_clicks"].append(user.id)
-            save_db()
-        verify = db["config"]["verify"]
-        if verify.get("active") and verify.get("url"):
-            try:
-                await q.answer(url=verify["url"])
-            except BadRequest:
-                # Some Telegram clients/accounts may reject URL-opening callback
-                # answers. The user still gets a direct clickable URL in an alert.
-                await q.answer("Open the verification link shown above.", show_alert=True)
-        else:
-            await q.answer("⚫ Verification is currently inactive.", show_alert=True)
-        return
 
     # All remaining callbacks are admin-only.
     if not is_admin(q.from_user.id):
@@ -709,18 +706,10 @@ async def cmd_start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
 
-async def cmd_help(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text(
-        "📝 <b>Usage</b>\n\n<code>/like ind 12234555</code>",
-        parse_mode="HTML",
-    )
-
-
 async def post_init(application: Application):
     # Match main1.py's PTB startup flow and command registration.
     commands = [
         BotCommand("start", "Open bot"),
-        BotCommand("help", "Show usage"),
         BotCommand("like", "Send like verification"),
     ]
     await application.bot.set_my_commands(commands, scope=BotCommandScopeDefault())
@@ -743,7 +732,6 @@ def main():
 
     # Command handlers first, like main1.py.
     app.add_handler(CommandHandler("start", cmd_start))
-    app.add_handler(CommandHandler("help", cmd_help))
     app.add_handler(CommandHandler("like", cmd_like))
     app.add_handler(CommandHandler("admin", cmd_admin))
 
