@@ -180,28 +180,42 @@ def valid_uid(uid: str) -> bool:
 # ============================================================
 # KEYBOARDS
 # ============================================================
+def styled_url_button(text, url, style):
+    # PTB 22.5 does not expose the newer `style=` constructor argument yet,
+    # but it supports `api_kwargs`. Telegram Bot API now accepts the style
+    # field there, so we can keep the project pinned to PTB 22.5 while still
+    # getting the real Telegram button colours.
+    return InlineKeyboardButton(
+        text,
+        url=url,
+        api_kwargs={"style": style},
+    )
+
+
 def verify_keyboard():
     cfg = db["config"]
     v = cfg["verify"]
     s = cfg["store"]
     h = cfg["howto"]
-    # VERIFY must be a direct URL button. Using callback_data +
-    # answerCallbackQuery(url=...) can show an "Open verification link"
-    # alert on some Telegram clients instead of opening the URL directly.
+    # Direct URL buttons: tapping them opens the link directly, without a
+    # callback popup/alert.
     return InlineKeyboardMarkup([
         [
-            InlineKeyboardButton(
+            styled_url_button(
                 v.get("name", DEFAULT_VERIFY["name"]),
-                url=v.get("url", DEFAULT_VERIFY["url"]),
+                v.get("url", DEFAULT_VERIFY["url"]),
+                "success",
             ),
-            InlineKeyboardButton(
+            styled_url_button(
                 s.get("name", DEFAULT_STORE["name"]),
-                url=s.get("url", DEFAULT_STORE["url"]),
+                s.get("url", DEFAULT_STORE["url"]),
+                "primary",
             ),
         ],
-        [InlineKeyboardButton(
+        [styled_url_button(
             h.get("name", DEFAULT_HOWTO["name"]),
-            url=h.get("url", DEFAULT_HOWTO["url"]),
+            h.get("url", DEFAULT_HOWTO["url"]),
+            "danger",
         )],
     ])
 
@@ -482,16 +496,21 @@ async def message_router(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # Only the group/supergroup is command-only. Private chat remains usable
     # for admin configuration and future additions.
     if message.chat and message.chat.type in ("group", "supergroup"):
-        # Send the warning first so Telegram can create the reply/quote, then
-        # delete the user's original message immediately afterwards.
+        # Delete the user's ordinary message FIRST. Then send a separate
+        # warning message and remove that warning after 3 seconds. This avoids
+        # leaving the user's original message visible while the warning is up.
         try:
-            warning = await message.reply_text(
-                "🚫 <b>Only commands are allowed here.</b>\n\n"
-                "Use: <code>/like {region} {uid}</code>\n"
-                "Example: <code>/like ind 12234555</code>",
+            chat_id = message.chat.id
+            await safe_delete(message)
+            warning = await context.bot.send_message(
+                chat_id=chat_id,
+                text=(
+                    "🚫 <b>Only commands are allowed here.</b>\n\n"
+                    "Use: <code>/like {region} {uid}</code>\n"
+                    "Example: <code>/like ind 12234555</code>"
+                ),
                 parse_mode="HTML",
             )
-            await safe_delete(message)
             await asyncio.sleep(3)
             await safe_delete(warning)
         except Exception as exc:
