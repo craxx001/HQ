@@ -309,8 +309,8 @@ async def temporary_warning(message, text, seconds=3):
 async def invalid_format(message):
     sent = await message.reply_text(
         "🚫 <b>Iɴᴠᴀʟɪᴅ Cᴏᴍᴍᴀɴᴅ</b>\n\n"
-        "➺ <b>Uꜱᴀɢɛ:</b> /𝚕𝚒𝚔𝚎  [𝚛𝚎𝚐𝚒𝚘𝚗]  [𝚞𝚒𝚍]\n\n"
-        "➺ <b>Exᴀᴍᴘʟᴇ:</b> /𝚕𝚒𝚔𝚎  𝚒𝚗𝚍  𝟷𝟸𝟼𝟶𝟷𝟽𝟽𝟾𝟺𝟻",
+        "📌 <b>Usage:</b> /𝚕𝚒𝚔𝚎  [𝚛𝚎𝚐𝚒𝚘𝚗]  [𝚞𝚒𝚍]\n\n"
+        "✨ <b>Example:</b> /𝚕𝚒𝚔𝚎  𝚒𝚗𝚍  𝟷𝟸𝟼𝟶𝟷𝟽𝟽𝟾𝟺𝟻",
         parse_mode="HTML",
     )
     # Keep it visible, as in the reference screenshot. Telegram command
@@ -357,15 +357,12 @@ async def cmd_like(update: Update, context: ContextTypes.DEFAULT_TYPE):
     name = html.escape(message.from_user.full_name or message.from_user.first_name or "User")
     url = verify["url"]
     text = (
-        "•── ⋅ ⋅ ──── ⋅᯽⋅ ──── ⋅ ⋅ ──•\n"
-        "✨ <b>Lɪᴋᴇ Rᴇǫᴜᴇꜱᴛ Vᴇʀɪꜰɪᴄᴀᴛɪᴏɴ </b>✨\n"
-        "•── ⋅ ⋅ ──── ⋅᯽⋅ ──── ⋅ ⋅ ──•\n"
-        "<blockquote>"
+        "✨ <b>LIKE REQUEST VERIFICATION</b>✨\n"
+        "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
         f"👤 <b>ɴᴀᴍɛ:</b> {name}\n"
         f"🆔 <b>ᴜɪᴅ:</b> <code>{uid}</code>\n"
-        f"🌍 <b>ʀɛɢɪᴏɴ:</b> <code>{region}</code>\n"
-        "</blockquote>\n"
-        "🔗 <b>Vɛʀɪꜰɪᴄᴀᴛɪᴏɴ lɪɴᴋ:</b>\n"
+        f"🌍 <b>ʀɛɢɪᴏɴ:</b> <code>{region}</code>\n\n"
+        "🔗 <b>Vɛʀɪꜰɪᴄᴀᴛɪᴏɴ Lɪɴᴋ:</b>\n"
         f'<a href="{html.escape(url, quote=True)}">{html.escape(url)}</a>\n\n'
         "⚠️ <b>ᴠᴇʀɪꜰʏ ᴛʜɪꜱ ʟɪɴᴋ ᴛᴏ ɢᴇᴛ ʟɪᴋᴇꜱ</b>"
     )
@@ -730,9 +727,18 @@ async def cmd_start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.effective_user:
         remember_user(update.effective_user)
     await update.message.reply_text(
-        "🎮 <b>Like Verification Bot</b>\n\n"
-        "Only the <code>/like {region} {uid}</code> command is allowed in the group.\n\n"
-        "Example: <code>/like ind 12234555</code>",
+        "💞 <b>WELCOME TO FREE LIKE BOT</b>\n"
+        "•── ⋅ ⋅ ──── ⋅᯽⋅ ──── ⋅ ⋅ ──•\n"
+        "<blockquote>"
+        "👤 <b>ɴᴀᴍɛ</b>» {name}\n"
+        "⚡ <b>ᴘʟᴀɴ</b>» ꜰʀᴇᴇ ᴜꜱᴇʀ\n"
+        "❤️ <b>ᴅᴀɪʟʏ ʟɪᴍɪᴛ</b>» 𝟣\n"
+        "🕓 <b>ᴅᴀɪʟʏ ʀᴇꜱᴇᴛ</b>» 𝟦:𝟢𝟢 ᴀᴍ\n"
+        "</blockquote>\n"
+        "<b>Usage:</b>\n"
+        "🎁 <code>/like {region} {uid}</code> -\n\n"
+        "<b>Example:</b>\n"
+        "📌 <code>/like ind 12345609</code>",
         parse_mode="HTML",
     )
 
