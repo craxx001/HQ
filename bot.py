@@ -357,8 +357,8 @@ async def cmd_like(update: Update, context: ContextTypes.DEFAULT_TYPE):
     name = html.escape(message.from_user.full_name or message.from_user.first_name or "User")
     url = verify["url"]
     text = (
-        "✨ <b>LIKE REQUEST VERIFICATION</b>✨\n"
-        "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+        "🎮 <b>LIKE REQUEST VERIFICATION</b>\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n"
         f"👤 <b>ɴᴀᴍɛ:</b> {name}\n"
         f"🆔 <b>ᴜɪᴅ:</b> <code>{uid}</code>\n"
         f"🌍 <b>ʀɛɢɪᴏɴ:</b> <code>{region}</code>\n\n"
@@ -506,7 +506,7 @@ async def message_router(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 chat_id=chat_id,
                 text=(
                     "💞 <b>WELCOME TO FREE LIKE BOT</b>\n"
-                    "•── ⋅ ⋅ ──── ⋅᯽⋅ ──── ⋅ ⋅ ──•\n"
+                    "━━━━━━━━━━━━━━━━━━━━━\n"
                     "<blockquote>"
                     "👤 <b>ɴᴀᴍɛ</b>» {name}\n"
                     "⚡ <b>ᴘʟᴀɴ</b>» ꜰʀᴇᴇ ᴜꜱᴇʀ\n"
@@ -728,7 +728,7 @@ async def cmd_start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         remember_user(update.effective_user)
     await update.message.reply_text(
         "💞 <b>WELCOME TO FREE LIKE BOT</b>\n"
-        "•── ⋅ ⋅ ──── ⋅᯽⋅ ──── ⋅ ⋅ ──•\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n"
         "<blockquote>"
         "👤 <b>ɴᴀᴍɛ</b>» {name}\n"
         "⚡ <b>ᴘʟᴀɴ</b>» ꜰʀᴇᴇ ᴜꜱᴇʀ\n"
