@@ -308,9 +308,9 @@ async def temporary_warning(message, text, seconds=3):
 
 async def invalid_format(message):
     sent = await message.reply_text(
-        "🚫 <b>Iɴᴠᴀʟɪᴅ Cᴏᴍᴍᴀɴᴅ</b>\n\n"
-        "📌 <b>Usage:</b> /𝚕𝚒𝚔𝚎  [𝚛𝚎𝚐𝚒𝚘𝚗]  [𝚞𝚒𝚍]\n\n"
-        "✨ <b>Example:</b> /𝚕𝚒𝚔𝚎  𝚒𝚗𝚍  𝟷𝟸𝟼𝟶𝟷𝟽𝟽𝟾𝟺𝟻",
+        "❌ <b>ɪɴᴠᴀʟɪᴅ ᴜsᴀɢᴇ!</b>\n\n"
+        "✅ <b>ᴄᴏʀʀᴇᴄᴛ:</b> /like <region> <uid>\n""
+        "📌 <b>ᴇxᴀᴍᴘʟᴇ:</b> /like IND 12345609",
         parse_mode="HTML",
     )
     # Keep it visible, as in the reference screenshot. Telegram command
@@ -502,6 +502,7 @@ async def message_router(update: Update, context: ContextTypes.DEFAULT_TYPE):
         try:
             chat_id = message.chat.id
             await safe_delete(message)
+            name = html.escape(message.from_user.full_name or message.from_user.first_name or "User")
             warning = await context.bot.send_message(
                 chat_id=chat_id,
                 text=(
@@ -513,9 +514,9 @@ async def message_router(update: Update, context: ContextTypes.DEFAULT_TYPE):
                     "❤️ <b>ᴅᴀɪʟʏ ʟɪᴍɪᴛ</b>» 𝟣\n"
                     "🕓 <b>ᴅᴀɪʟʏ ʀᴇꜱᴇᴛ</b>» 𝟦:𝟢𝟢 ᴀᴍ\n"
                     "</blockquote>\n"
-                    "<b>Usage:</b>\n"
+                    "<b>ᴜsᴀɢᴇ:</b>\n"
                     "🎁 <code>/like {region} {uid}</code> -\n\n"
-                    "<b>Example:</b>\n"
+                    "<b>ᴇxᴀᴍᴘʟᴇ:</b>\n"
                     "📌 <code>/like ind 12345609</code>"
                 ),
                 parse_mode="HTML",
