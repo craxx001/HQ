@@ -503,16 +503,12 @@ async def message_router(update: Update, context: ContextTypes.DEFAULT_TYPE):
             chat_id = message.chat.id
             await safe_delete(message)
             user = message.from_user
-            name = user.first_name or "User"
-            if user.last_name:
-                name += f" {user.last_name}"
             warning = await context.bot.send_message(
                 chat_id=chat_id,
                 text=(
                     "💞 <b>WELCOME TO FREE LIKE BOT</b>\n"
                     "━━━━━━━━━━━━━━━━━━━━━\n"
                     "<blockquote>"
-                    "👤 <b>ɴᴀᴍɛ</b>» {name}\n"
                     "⚡ <b>ᴘʟᴀɴ</b>» ꜰʀᴇᴇ ᴜꜱᴇʀ\n"
                     "❤️ <b>ᴅᴀɪʟʏ ʟɪᴍɪᴛ</b>» 𝟣\n"
                     "🕓 <b>ᴅᴀɪʟʏ ʀᴇꜱᴇᴛ</b>» 𝟦:𝟢𝟢 ᴀᴍ\n"
