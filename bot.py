@@ -308,8 +308,8 @@ async def temporary_warning(message, text, seconds=3):
 
 async def invalid_format(message):
     sent = await message.reply_text(
-        "❌ <b>ɪɴᴠᴀʟɪᴅ ᴜꜱᴀɢᴇ</b>\n\n"
-        "✅ <b>ᴄᴏʀʀᴇᴄᴛ:</b> /like <region> <uid>\n""
+        "❌ <b>ɪɴᴠᴀʟɪᴅ ᴜꜱᴀɢᴇ!</b>\n\n"
+        "✅ <b>ᴄᴏʀʀᴇᴄᴛ:</b> /like <region> <uid>\n"
         "📌 <b>ᴇxᴀᴍᴘʟᴇ:</b> /like IND 12345609",
         parse_mode="HTML",
     )
