@@ -502,7 +502,11 @@ async def message_router(update: Update, context: ContextTypes.DEFAULT_TYPE):
         try:
             chat_id = message.chat.id
             await safe_delete(message)
-            name = html.escape(message.from_user.full_name or message.from_user.first_name or "User")
+            user = message.from_user
+            name = user.first_name or "User"
+             if user.last_name:
+                name += f" {user.last_name}"
+            name = html.escape(name)
             warning = await context.bot.send_message(
                 chat_id=chat_id,
                 text=(
