@@ -506,7 +506,6 @@ async def message_router(update: Update, context: ContextTypes.DEFAULT_TYPE):
             name = user.first_name or "User"
             if user.last_name:
                 name += f" {user.last_name}"
-            name = html.escape(name)
             warning = await context.bot.send_message(
                 chat_id=chat_id,
                 text=(
