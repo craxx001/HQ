@@ -41,7 +41,7 @@ DEFAULT_VERIFY = {
     "active": True,
 }
 DEFAULT_STORE = {
-    "name": "🛒 STORE",
+    "name": "🔥 STORE",
     "url": "https://t.me/princezz_bot?start",
 }
 DEFAULT_HOWTO = {
@@ -209,13 +209,13 @@ def verify_keyboard():
             styled_url_button(
                 s.get("name", DEFAULT_STORE["name"]),
                 s.get("url", DEFAULT_STORE["url"]),
-                "success",
+                "primary",
             ),
         ],
         [styled_url_button(
             h.get("name", DEFAULT_HOWTO["name"]),
             h.get("url", DEFAULT_HOWTO["url"]),
-            "primary",
+            "danger",
         )],
     ])
 
@@ -509,8 +509,8 @@ async def message_router(update: Update, context: ContextTypes.DEFAULT_TYPE):
                     "💞 <b>WELCOME TO FREE LIKE BOT</b>\n"
                     "━━━━━━━━━━━━━━━━━━━━━\n"
                     "<blockquote>"
-                    "🔥 <b>ᴘʟᴀɴ</b>» ꜰʀᴇᴇ ᴜꜱᴇʀ\n"
-                    "📦 <b>ᴅᴀɪʟʏ ʟɪᴍɪᴛ</b>» 𝟣\n"
+                    "✅ <b>ᴘʟᴀɴ</b>» ꜰʀᴇᴇ\n"
+                    "⭐ <b>ᴅᴀɪʟʏ ʟɪᴍɪᴛ</b>» 𝟣\n"
                     "🕓 <b>ᴅᴀɪʟʏ ʀᴇꜱᴇᴛ</b>» 𝟦:𝟢𝟢 ᴀᴍ\n"
                     "</blockquote>\n"
                     "<b>ᴜsᴀɢᴇ:</b>\n"
@@ -730,8 +730,8 @@ async def cmd_start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "💞 <b>WELCOME TO FREE LIKE BOT</b>\n"
         "━━━━━━━━━━━━━━━━━━━━━\n"
         "<blockquote>"
-        "🔥 <b>ᴘʟᴀɴ</b>» ꜰʀᴇᴇ ᴜꜱᴇʀ\n"
-        "📦 <b>ᴅᴀɪʟʏ ʟɪᴍɪᴛ</b>» 𝟣\n"
+        "✅ <b>ᴘʟᴀɴ</b>» ꜰʀᴇᴇ\n"
+        "⭐ <b>ᴅᴀɪʟʏ ʟɪᴍɪᴛ</b>» 𝟣\n"
         "🕓 <b>ᴅᴀɪʟʏ ʀᴇꜱᴇᴛ</b>» 𝟦:𝟢𝟢 ᴀᴍ\n"
         "</blockquote>\n"
         "<b>Usage:</b>\n"
